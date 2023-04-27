@@ -81,11 +81,7 @@ qstats_aggr_split as (select TOP {limit}
     where DATEADD(ms, last_elapsed_time / 1000, last_execution_time) > dateadd(second, -?, getdate())
 )
 select
-    SUBSTRING(text, (statement_start_offset / 2) + 1,
-    ((CASE statement_end_offset
-        WHEN -1 THEN DATALENGTH(text)
-        ELSE statement_end_offset END
-            - statement_start_offset) / 2) + 1) AS statement_text,
+    text AS statement_text,
     qt.text,
     encrypted as is_encrypted,
     * from qstats_aggr_split
@@ -113,11 +109,7 @@ qstats_aggr_split as (select
     * from qstats_aggr
 )
 select
-    SUBSTRING(text, (statement_start_offset / 2) + 1,
-        ((CASE statement_end_offset
-        WHEN -1 THEN DATALENGTH(text)
-        ELSE statement_end_offset
-    END - statement_start_offset) / 2) + 1) AS statement_text,
+    text AS statement_text,
     qt.text,
     encrypted as is_encrypted,
     * from qstats_aggr_split
